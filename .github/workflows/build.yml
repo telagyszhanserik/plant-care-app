@@ -26,7 +26,7 @@ jobs:
         run: |
           if [ -f "./gradlew" ]; then
             chmod +x gradlew
-            ./gradlew assembleDebug --stacktrace
+            ./gradlew :app:assembleDebug --stacktrace
           else
             gradle assembleDebug --stacktrace
           fi
