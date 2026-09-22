@@ -16,15 +16,24 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Build APK with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          command: buildozer android debug
-          buildozer_version: stable
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y git zip unzip openjdk-17-jdk python3-pip \
+            autoconf libtool pkg-config zlib1g-dev libncurses-dev \
+            cmake libffi-dev libssl-dev build-essential
+
+      - name: Install buildozer and cython
+        run: |
+          pip install --upgrade pip
+          pip install buildozer cython==0.29.36
+
+      - name: Build APK
+        run: |
+          yes | buildozer android debug
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: plant-care-app-apk
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: bin/*.apk
